@@ -1,28 +1,38 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\EventoController;  // ← Importa tu controlador
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EventoController;
+use App\Http\Controllers\UserEventController;
+use App\Http\Controllers\Admin\EventController as AdminEventController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Aquí se definen todas las rutas de la aplicación.
+|
+*/
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Landing page
+Route::get('/', fn() => view('welcome'))->name('home');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile',   [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile',[ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+// Dashboard de Breeze
+Route::get('/dashboard', fn() => view('dashboard'))
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
+// Rutas de autenticación (login, register, etc.)
 require __DIR__.'/auth.php';
 
-// ——— RUTAS PARA EVENTOS ———
+/*
+|--------------------------------------------------------------------------
+| Rutas Públicas de Eventos
+|--------------------------------------------------------------------------
+*/
 
-// Listar eventos públicos (sin auth)
+// Listar próximos eventos sin necesidad de autenticarse
 Route::get('/events', [EventoController::class, 'index'])
      ->name('events.index');
 
@@ -30,17 +40,50 @@ Route::get('/events', [EventoController::class, 'index'])
 Route::get('/events/{event}', [EventoController::class, 'show'])
      ->name('events.show');
 
-// Todas las rutas siguientes requieren estar autenticado
+/*
+|--------------------------------------------------------------------------
+| Rutas para Usuarios Autenticados
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('auth')->group(function () {
+    // Perfil de usuario (Breeze)
+    Route::get('/profile', [ProfileController::class, 'edit'])
+         ->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])
+         ->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+         ->name('profile.destroy');
+
     // Inscribirse a un evento
     Route::post('/events/{event}/subscribe', [EventoController::class, 'subscribe'])
          ->name('events.subscribe');
 
-    // Subir archivo de evidencia
+    // Subir evidencia a un evento
     Route::post('/events/{event}/files', [EventoController::class, 'uploadFile'])
          ->name('events.files.upload');
 
-    // Borrar un archivo subido
+    // Eliminar un archivo subido
     Route::delete('/files/{file}', [EventoController::class, 'destroyFile'])
          ->name('files.destroy');
+
+    // Ver mis eventos inscritos
+    Route::get('/my-events', [UserEventController::class, 'index'])
+         ->name('my-events.index');
 });
+
+/*
+|--------------------------------------------------------------------------
+| CRUD de Eventos (Administradores)
+|--------------------------------------------------------------------------
+|
+| Solo usuarios con permiso 'manage' en EventPolicy podrán acceder.
+|
+*/
+
+Route::prefix('admin')
+     ->middleware(['auth', 'can:manage,App\Models\Event'])
+     ->name('admin.')
+     ->group(function () {
+         Route::resource('events', AdminEventController::class);
+     });

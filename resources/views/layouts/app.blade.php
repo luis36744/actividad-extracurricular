@@ -2,29 +2,34 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>@yield('title', 'Actividad Extracurricular')</title>
-  <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+  <title>@yield('title','Actividad Extracurricular')</title>
+  @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
-<body>
-  <nav>
-    <a href="{{ route('events.index') }}">Eventos</a>
-    @guest
-      <a href="{{ route('login') }}">Iniciar sesión</a>
-      <a href="{{ route('register') }}">Registrarse</a>
-    @else
-      <span>Hola, {{ auth()->user()->name }}</span>
-      <form method="POST" action="{{ route('logout') }}">@csrf<button>Cerrar sesión</button></form>
-    @endguest
+<body class="bg-gray-100 min-h-screen">
+
+  <nav class="bg-white shadow-sm p-4 flex justify-between">
+    <a href="{{ route('events.index') }}" class="font-semibold">Eventos</a>
+
+    <div class="space-x-4">
+      @guest
+        <a href="{{ route('login') }}">Iniciar sesión</a>
+        <a href="{{ route('register') }}">Registrarse</a>
+      @else
+        <span>Hola, {{ auth()->user()->name }}</span>
+        <form action="{{ route('logout') }}" method="POST" class="inline">
+          @csrf
+          <button type="submit">Cerrar sesión</button>
+        </form>
+      @endguest
+    </div>
   </nav>
 
-  <main class="container">
+  <main class="p-6">
     @if(session('status'))
-      <div class="alert">{{ session('status') }}</div>
+      <div class="mb-4 p-2 bg-green-100">{{ session('status') }}</div>
     @endif
 
     @yield('content')
   </main>
-
-  <script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>

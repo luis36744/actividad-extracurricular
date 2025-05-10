@@ -3,14 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;   // ← importa User
-use App\Models\Event;  // ← importa Event
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Models\Event;
 
 class File extends Model
 {
-    // Si vas a crear también factories para File, agrega:
-    // use \Illuminate\Database\Eloquent\Factories\HasFactory;
+    use HasFactory;
 
+    /**
+     * Los atributos que se pueden asignar masivamente.
+     *
+     * @var array
+     */
     protected $fillable = [
         'user_id',
         'event_id',
@@ -18,11 +23,17 @@ class File extends Model
         'path',
     ];
 
+    /**
+     * Relación al usuario que subió el archivo.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Relación al evento al que pertenece el archivo.
+     */
     public function event()
     {
         return $this->belongsTo(Event::class);

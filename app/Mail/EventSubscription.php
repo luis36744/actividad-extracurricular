@@ -17,12 +17,12 @@ class EventSubscription extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public Event $event) {}
+    public function __construct(public Event $event){}
     public function build()
     {
-        return $this->subject('Inscripción al evento')
-                    ->markdown('emails.subscriptions.confirmation')
-                    ->with('event', $this->event);
+    return $this->subject('Inscripción al evento')
+                ->markdown('emails.subscriptions.confirmation')
+                ->with('event',$this->event);
     }
 
     /**
