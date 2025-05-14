@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 
-class EventController extends Controller
+class EventoController extends Controller
 {
     public function __construct()
     {
@@ -17,12 +18,12 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::orderBy('starts_at')->get();
-        return view('admin.events.index', compact('events'));
+        return view('events.index', compact('events'));
     }
 
     public function create()
     {
-        return view('admin.events.create');
+        return view('events.create');
     }
 
     public function store(Request $request)
@@ -36,19 +37,19 @@ class EventController extends Controller
         Event::create($data);
 
         return redirect()
-            ->route('admin.events.index')
+            ->route('events.index')
             ->with('status','Evento creado correctamente.');
     }
 
     public function show(Event $event)
     {
         $event->load('users','files.user');
-        return view('admin.events.show', compact('event'));
+        return view('events.show', compact('event'));
     }
 
     public function edit(Event $event)
     {
-        return view('admin.events.edit', compact('event'));
+        return view('events.edit', compact('event'));
     }
 
     public function update(Request $request, Event $event)
@@ -62,7 +63,7 @@ class EventController extends Controller
         $event->update($data);
 
         return redirect()
-            ->route('admin.events.index')
+            ->route('events.index')
             ->with('status','Evento actualizado correctamente.');
     }
 
@@ -71,7 +72,16 @@ class EventController extends Controller
         $event->delete();
 
         return redirect()
-            ->route('admin.events.index')
+            ->route('events.index')
             ->with('status','Evento eliminado correctamente.');
     }
+    public function subscribe(Request $request, Event $event)
+{
+        $user = auth()->user();
+
+        // Aquí deberías tener una relación many-to-many (por ejemplo, evento_user)
+        $event->users()->attach($user->id);
+
+        return redirect()->back()->with('success', 'Te has suscrito al evento.');
+}
 }

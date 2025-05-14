@@ -1,4 +1,3 @@
-cat > resources/views/events/show.blade.php << 'EOF'
 @extends('layouts.app')
 
 @section('title', $event->title)
