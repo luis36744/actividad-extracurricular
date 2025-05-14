@@ -32,6 +32,15 @@ require __DIR__.'/auth.php';
 |--------------------------------------------------------------------------
 */
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/perfil', [ProfileController::class, 'show'])->name('perfil');
+});
+
+
+Route::delete('/events/{event}/unsubscribe', [UserEventController::class, 'unsubscribe'])
+    ->middleware('auth')
+    ->name('events.unsubscribe');
+
 // Listar próximos eventos sin necesidad de autenticarse
 Route::get('/events', [EventoController::class, 'index'])
      ->name('events.index');

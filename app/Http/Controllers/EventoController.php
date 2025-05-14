@@ -72,16 +72,16 @@ class EventoController extends Controller
         $event->delete();
 
         return redirect()
-            ->route('events.index')
+            ->route('perfil')
             ->with('status','Evento eliminado correctamente.');
     }
     public function subscribe(Request $request, Event $event)
-{
+    {
         $user = auth()->user();
 
         // Aquí deberías tener una relación many-to-many (por ejemplo, evento_user)
         $event->users()->attach($user->id);
 
         return redirect()->back()->with('success', 'Te has suscrito al evento.');
-}
+    }
 }

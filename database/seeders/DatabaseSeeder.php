@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         // Aquí siembras 20 eventos de prueba:
         Event::factory()->count(20)->create();
+        UserSeeder::class;
     }
 }

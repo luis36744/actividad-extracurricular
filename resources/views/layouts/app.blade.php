@@ -9,7 +9,12 @@
 
   <nav class="bg-white shadow-sm p-4 flex justify-between">
     <a href="{{ route('events.index') }}" class="font-semibold">Eventos</a>
-
+    @if (!Route::is('perfil'))
+      <a href="{{ route('perfil') }}" class="font-semibold">Mi perfil</a>
+    @else
+      <a href="{{ route('home') }}" class="font-semibold">Inicio</a>
+    @endif
+    
     <div class="space-x-4">
       @guest
         <a href="{{ route('login') }}">Iniciar sesión</a>
