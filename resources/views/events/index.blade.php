@@ -14,6 +14,7 @@
           <div>
             <strong>{{ $event->title }}</strong><br>
             <small class="text-gray-600">{{ $event->starts_at->format('d/m/Y H:i') }}</small>
+            <small class="text-gray-600">Creditos </small><small class="text-gray-600">{{ $event->creditos }}</small>
           </div>
           <a href="{{ route('events.show',$event) }}"
              class="self-center px-3 py-1 bg-blue-500 text-white rounded">

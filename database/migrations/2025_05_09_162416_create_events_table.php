@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->dateTime('starts_at');
+            $table->integer('creditos')->default(0);
             $table->timestamps();
         });
     }

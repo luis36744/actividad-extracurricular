@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Event; // ✅ Agregado para evitar el error
+use App\Models\Event; // Agregado para evitar el error
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 🟢 Aquí siembras 20 eventos de prueba:
+        // Aquí siembras 20 eventos de prueba:
         Event::factory()->count(20)->create();
     }
 }

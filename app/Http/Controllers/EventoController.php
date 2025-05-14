@@ -12,7 +12,7 @@ class EventoController extends Controller
     public function __construct()
     {
         // Aplica EventPolicy@manage a todas las acciones
-        $this->authorizeResource(Event::class, 'event');
+         $this->authorizeResource(Event::class, 'event', ['except' => ['index', 'show']]);
     }
 
     public function index()

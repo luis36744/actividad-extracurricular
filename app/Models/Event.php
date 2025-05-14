@@ -15,6 +15,7 @@ class Event extends Model
         'title',
         'description',
         'starts_at',
+        'creditos',
     ];
 
     // ← Añade esto:
